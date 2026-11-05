@@ -1,0 +1,611 @@
+/* QR Codes page — owner UI. Uses tokens from src/index.css. */
+
+.qr-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.qr-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.qr-header .page-heading p {
+  max-width: 640px;
+}
+
+.qr-header-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 12px;
+}
+
+.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 20px;
+  color: var(--ink);
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  font-size: 16px;
+  font-weight: 800;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.secondary-button svg {
+  width: 22px;
+  height: 22px;
+}
+
+.secondary-button:hover:not(:disabled) {
+  border-color: rgba(214, 64, 50, 0.4);
+  background: var(--red-soft);
+}
+
+.secondary-button.dark {
+  color: white;
+  border-color: var(--ink);
+  background: var(--ink);
+}
+
+.secondary-button.dark:hover:not(:disabled) {
+  border-color: #3d2c28;
+  background: #3d2c28;
+}
+
+.secondary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* ---------- Generate ---------- */
+
+.generate-panel {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+.generate-label {
+  margin-bottom: 10px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.big-stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 2px solid var(--line);
+  border-radius: 22px;
+  background: var(--cream);
+}
+
+.big-stepper button {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  color: var(--red-dark);
+  border-radius: 16px;
+  background: var(--paper);
+  box-shadow: 0 2px 6px rgba(69, 46, 34, 0.08);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.big-stepper button:hover:not(:disabled) {
+  background: var(--red-soft);
+}
+
+.big-stepper button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.big-stepper input {
+  width: 96px;
+  color: var(--ink);
+  border: 0;
+  background: transparent;
+  font-size: 40px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.generate-action {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.primary-button.generate-button {
+  max-width: 440px;
+  min-height: 76px;
+  font-size: 21px;
+}
+
+.generate-action p {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* ---------- Empty state ---------- */
+
+.qr-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 56px 24px;
+  border: 2px dashed var(--line);
+  border-radius: 24px;
+  text-align: center;
+}
+
+.qr-empty-icon {
+  display: grid;
+  width: 84px;
+  height: 84px;
+  margin-bottom: 16px;
+  place-items: center;
+  color: var(--red);
+  border-radius: 999px;
+  background: var(--red-soft);
+}
+
+.qr-empty-icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.qr-empty h2 {
+  color: var(--ink);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.qr-empty p {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+/* ---------- QR grid ---------- */
+
+.qr-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.qr-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 22px 18px 18px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--paper);
+  box-shadow: 0 6px 18px rgba(69, 46, 34, 0.05);
+  text-align: center;
+  animation: card-in 320ms ease both;
+}
+
+.qr-card.flash {
+  animation: qr-flash 1.4s ease;
+}
+
+.qr-card-code {
+  width: 100%;
+  max-width: 210px;
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.qr-card-table {
+  margin-top: 14px;
+  color: var(--ink);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+/* Words never split mid-word; lines break only at spaces. */
+.scan-lines .word {
+  white-space: nowrap;
+}
+
+.scan-lines {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qr-card .scan-lines li {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.qr-card-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.qr-card-actions button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 66px;
+  padding: 6px 4px;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--cream);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.25;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.qr-card-actions svg {
+  width: 22px;
+  height: 22px;
+}
+
+.qr-card-actions button:hover {
+  border-color: rgba(214, 64, 50, 0.35);
+  background: var(--red-soft);
+}
+
+.qr-card-actions button.print {
+  color: white;
+  border-color: var(--red);
+  background: var(--red);
+}
+
+.qr-card-actions button.print:hover {
+  background: var(--red-dark);
+}
+
+.owner-shell:lang(my) .qr-card-actions button {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ---------- Print preview modal ---------- */
+
+.modal-overlay {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  display: grid;
+  padding: 24px;
+  place-items: center;
+  background: rgba(39, 27, 24, 0.52);
+  animation: fade-in 160ms ease;
+}
+
+.print-modal {
+  display: flex;
+  flex-direction: column;
+  width: min(920px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: hidden;
+  border-radius: 26px;
+  background: var(--paper);
+  box-shadow: 0 30px 80px rgba(39, 27, 24, 0.35);
+  animation: sheet-up 220ms ease;
+}
+
+.print-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 26px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.print-modal-head h2 {
+  color: var(--ink);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.print-modal-head p {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.modal-close {
+  display: grid;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  color: var(--muted);
+  border-radius: 999px;
+  background: var(--cream);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: var(--ink);
+  background: var(--line);
+}
+
+.pdf-hint {
+  padding: 12px 26px;
+  color: #8a5600;
+  background: #fff4e2;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.print-modal-body {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  justify-content: center;
+  gap: 22px;
+  padding: 26px;
+  overflow-y: auto;
+  background: #ece3d8;
+}
+
+.print-modal-body.single {
+  grid-template-columns: max-content;
+}
+
+.tent-preview {
+  font-size: 5.4px;
+  box-shadow: 0 10px 26px rgba(39, 27, 24, 0.16);
+}
+
+.print-modal-body.single .tent-preview {
+  font-size: 6.2px;
+}
+
+.print-modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 18px 26px;
+  border-top: 1px solid var(--line);
+}
+
+.print-modal-foot .secondary-button {
+  min-width: 150px;
+  min-height: 60px;
+  font-size: 18px;
+}
+
+.primary-button.print-confirm {
+  width: auto;
+  min-width: 220px;
+  min-height: 60px;
+  font-size: 19px;
+}
+
+.print-confirm svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ---------- Table tent (sized in em: 70em × 99em = A4) ---------- */
+
+.tent-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 70em;
+  height: 99em;
+  overflow: hidden;
+  color: var(--ink);
+  background: white;
+  font-family: 'Nunito Sans', 'Noto Sans Myanmar', sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* The red band sits on each half's outer edge (top half is rotated). */
+.tent-half {
+  display: grid;
+  flex: 1 1 0;
+  grid-template-columns: 28em minmax(0, 1fr);
+  align-items: center;
+  gap: 3.5em;
+  padding: 0 4.5em;
+  border-bottom: 1.2em solid var(--red);
+}
+
+.tent-half.flipped {
+  transform: rotate(180deg);
+}
+
+.tent-qr {
+  width: 28em;
+  height: 28em;
+  padding: 0.8em;
+  border: 0.35em solid var(--line);
+  border-radius: 2em;
+  background: white;
+}
+
+.tent-brand {
+  display: flex;
+  align-items: center;
+  gap: 1.4em;
+}
+
+.tent-brand .logo-mark {
+  width: 6.5em;
+  height: 6.5em;
+  border-radius: 2em;
+  box-shadow: none;
+}
+
+.tent-brand .logo-mark svg {
+  width: 4.2em;
+  height: 4.2em;
+}
+
+.tent-brand span {
+  font-size: 3.1em;
+  white-space: nowrap;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.tent-table-words {
+  margin-top: 3.2em;
+  color: var(--muted);
+  font-size: 1.9em;
+  font-weight: 700;
+}
+
+.tent-table-number {
+  color: var(--red);
+  font-size: 12em;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.tent-info .scan-lines {
+  margin-top: 1.6em;
+}
+
+.tent-info .scan-lines li {
+  color: var(--ink);
+  font-size: 1.8em;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.tent-fold {
+  position: relative;
+  height: 0;
+  border-top: 0.3em dashed #c9b8a8;
+}
+
+.tent-fold span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  padding: 0.3em 1.4em;
+  color: #a8968a;
+  border-radius: 1em;
+  background: white;
+  font-size: 1.5em;
+  font-weight: 700;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+/* ---------- Toast ---------- */
+
+.owner-toast {
+  position: fixed;
+  z-index: 70;
+  bottom: 32px;
+  left: 50%;
+  padding: 14px 22px;
+  color: white;
+  border-radius: 14px;
+  background: var(--ink);
+  box-shadow: 0 10px 28px rgba(39, 27, 24, 0.28);
+  font-size: 16px;
+  font-weight: 800;
+  transform: translateX(-50%);
+  animation: toast-rise 220ms ease;
+}
+
+@keyframes toast-rise {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes qr-flash {
+  30% {
+    border-color: var(--red);
+    box-shadow: 0 0 0 5px rgba(214, 64, 50, 0.2);
+  }
+}
+
+/* ---------- Printing: only the tent sheet goes on paper ---------- */
+
+@media screen {
+  .print-sheet {
+    display: none;
+  }
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  html,
+  body {
+    min-width: 0;
+    background: white !important;
+  }
+
+  #root {
+    display: none !important;
+  }
+
+  .print-sheet {
+    display: block;
+  }
+
+  .print-sheet .tent-page {
+    font-size: 3mm; /* 70em × 99em → 210mm × 297mm */
+    break-after: page;
+  }
+
+  .print-sheet .tent-page:last-child {
+    break-after: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qr-card,
+  .qr-card.flash,
+  .owner-toast,
+  .modal-overlay,
+  .print-modal {
+    animation: none;
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Browse Linn Noodle’s Burmese Shan menu, choose a language, and add dishes to a table-specific cart for simple QR-code ordering.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
